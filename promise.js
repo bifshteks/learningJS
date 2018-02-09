@@ -19,5 +19,6 @@ const openFile = (path) => new Promise((resolve, reject) => {
 		})	
 })
 
-openFile('./data.json').then((res)=> console.log(res), (error) => console.log(error, 'END'))
+openFile('./data.json').then((res)=> console.log(res),
+							 (error) => console.log(error, 'END'))
 
