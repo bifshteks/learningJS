@@ -14,6 +14,7 @@ const openJson = (path) => new Promise(
 		})
 });
 
+
 openJson('./data.json').then(
 	(obj) => console.log(obj),
 	(err) => console.log(err)
