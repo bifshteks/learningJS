@@ -1,18 +1,20 @@
 const fs = require('fs');
 
-var promise = new Promise(function(resolve, reject){
-	fs.readFile('./data.json', (err, data) => err ? reject(err) : resolve(data)	);
+const openJson = (path) => new Promise(
+	(resolve, reject) => {
+		fs.readFile(path, (err, data) => {
+			if (err) {
+				reject(err);
+			}
+			try {
+				resolve(JSON.parse(data));
+			} catch (err) {
+				reject(err)
+			}
+		})
 });
 
-
-function parseJSONData(data){
-	try {
-	  var obj = JSON.parse(data);
-	  console.log('Результат: ', obj);
-	} catch (e) {
-	  console.error('Ошибка: ', err)
-	}
-}
-
-
-promise.then(parseJSONData, err => console.log('Ошибка: ', err))
+openJson('./data.json').then(
+	(obj) => console.log(obj),
+	(err) => console.log(err)
+)
