@@ -1,9 +1,7 @@
 const fs = require('fs');
 
 var promise = new Promise(function(resolve, reject){
-	fs.readFile('./data.json',function (err, data) {
-		err ? reject(err) : resolve(data)
-	});
+	fs.readFile('./data.json', (err, data) => err ? reject(err) : resolve(data)	);
 });
 
 promise.then(data => {
