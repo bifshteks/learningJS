@@ -7,12 +7,12 @@ var promise = new Promise(function(resolve, reject){
 
 function parseJSONData(data){
 	try {
-	  var obj = JSON.parse(data);
-	  console.log('Результат: ', obj);
+	 	var obj = JSON.parse(data);
+		console.log('Результат: ', obj);
 	} catch (e) {
-	  console.error('Ошибка: ', err)
+		console.error('Ошибка при парсинге: ', e)
 	}
 }
 
 
-promise.then(parseJSONData, err => console.log('Ошибка: ', err))
+promise.then(parseJSONData, err => console.log('Ошибка при чтении файла: ', err))
