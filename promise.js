@@ -1,27 +1,5 @@
 const fs = require('fs');
 
-// const openJson = (path) => new Promise(
-// 	(resolve, reject) => {
-// 		fs.readFile(path, (err, data) => {
-// 			if (err) {
-// 				reject(err);
-// 			}
-// 			try {
-// 				resolve(JSON.parse(data));
-// 			} catch (err) {
-// 				reject(err)
-// 			}
-// 		})
-// });
-
-
-// openJson('./data.json').then(
-// 	(obj) => console.log(obj),
-// 	(err) => console.log(err)
-// )
-
-
-
 const parseJson = (obj) => new Promise((resolve, reject) => {
 	try{
 		const data = JSON.parse(obj);
@@ -30,6 +8,7 @@ const parseJson = (obj) => new Promise((resolve, reject) => {
 		reject(e)
 	}	
 })
+
 const openFile = (path) => new Promise((resolve, reject) => {
 	fs.readFile(path, (err, data) => {
 			if (err) {
@@ -40,4 +19,5 @@ const openFile = (path) => new Promise((resolve, reject) => {
 		})	
 })
 
-openFile('./data.json').then((res)=> console.log(res), (err) => console.log(err))
+openFile('./data.json').then((res)=> console.log(res), (error) => console.log(error, 'END'))
+
