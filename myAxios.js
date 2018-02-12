@@ -1,4 +1,3 @@
-var XMLHttpRequest = require('xhr2');
 const fetch = require('node-fetch');
 
 
