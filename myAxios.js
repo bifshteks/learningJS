@@ -1,137 +1,185 @@
 var XMLHttpRequest = require('xhr2');
+const fetch = require('node-fetch');
 
 
 // var method = process.argv[2];
-var url = 'https://mathiasbynens.be/demo/ip'//process.argv[3];
+// var url = 'https://mathiasbynens.be/demo/ip'//process.argv[3];
 
 
-function getJson(data){
-	return new Promise((resolve, reject) => {
-		try{
-			let jsonData = JSON.parse(data);
-			console.log('jsonData ', jsonData)
-			resolve(jsonData)
-		} catch (error) {
-			reject([data, error])// reject(error, data)
-		}
-	});
+async function getJson(data){
+	try {
+		let jsonData = await data.json();
+		return jsonData
+
+	} catch (error) {
+		throw new Error('getting json')
+	}
 }
 
-function getData(url, method, body){
-	return new Promise((resolve, reject) => {
-		let xhr = new XMLHttpRequest();
-		xhr.responseType = 'json';
-		xhr.open(method, url);
-		xhr.onload = () => {
-			if (xhr.status === 200){
-				resolve(xhr.response)
-			} else {
-				console.log('used method2 ', method)
-				reject(xhr.statusText);
-			}
-		};
+async function getData(url, method, body){
+	try {
+		let data = await fetch(url, method, body);
+		return data
 
-		xhr.onerror = (error) => {
-			console.log('used method ', method)
-			reject(error)
-		};
-
-		xhr.send(body);
-	})
+	} catch (error) {
+		throw new Error('getting data')
+	}
 }
 
-function sendRequest(url, method, body){
-	getData(url, method, body)
-		// .then(
-		// 	(resp) => {
-		// 		console.log('retunr')
-		// 		return getJson(resp)
-		// 	},
-		// 	(error) => {
-		// 		console.error('Во время выполнения возникла ошибка: ', error);
-		// 	}
-		// )
-		// .then(
-		// 	(json) => {
-		// 		// console.log(json, 'Test 10')
-		// 		console.log('Данные получены: ', json)
-		// 	}, 
-		// 	(dataNotJson) => {
-		// 		console.error('Преобразование в Json невозможно. Данные: ', dataNotJson)
-		// 		// console.log('Итоговые данные: ', dataNotJson)
-		// })
-		.then(
-			(resp) => {
-				console.log('retunr')
-				return getJson(resp)
-					.then(
-						(json) => {
-							// console.log(json, 'Test 10')
-							console.log('Данные получены: ', json)
-						},
-						(data) => {
-							console.log('Преобразование в Json невозможно. Причина ', data[1], '\n\nДанные: ',data[0])
-						}
+async function sendRequest(url, method, body){
+	try {
+		let data = await getData(url, method, body);
+		let json = await getJson(data);
+		return json
+
+	} catch (error) {
+		throw new Error(`which was thrown while ${error}`)
+	}
+	// getData(url, method, body)
+	// 	.then(
+	// 		(resp) => {
+	// 			console.log('retunr')
+	// 			return getJson(resp)
+	// 				.then(
+	// 					(json) => {
+	// 						// console.log(json, 'Test 10')
+	// 						console.log('Данные получены: ', json)
+	// 					},
+	// 					(data) => {
+	// 						console.log('Преобразование в Json невозможно. Причина ', data[1], '\n\nДанные: ',data[0])
+	// 					}
 					
-					)
-			}
-		)
-		.catch((error) => {
-			console.error('Во время выполнения возникла ошибка: ', error);
-		})
-		// .then(
-		// 	(json) => {
-		// 		// console.log(json, 'Test 10')
-		// 		console.log('Данные получены: ', json)
-		// 	},
-		// 	(data) => {
-		// 		console.log('Преобразование в Json невозможно. Данные ', data.slice(0, 30))
-		// 	}
-		
-		// )
-		
-		// .catch((error) => {
-		// 	console.error('Во время выполнения возникла ошибка: ', error);
-		// })
+	// 				)
+	// 		}
+	// 	)
+	// 	.catch((error) => {
+	// 		console.error('Во время выполнения возникла ошибка: ', error);
+	// 	})
 }
+
+
 class Request {
 
 	constructor(url, body='') {
 		
-		this.method = 'GET'
+		// this.method = 'GET'
 		this.url = url
 		this.body = body
 	}
 
-	get() {
-		sendRequest(this.url, this.method, this.body)
+	async get() {
+		try {
+			var resultData = await sendRequest(this.url, this.method, this.body)
+			return resultData
+
+		} catch (error) {
+			throw new Error(`Oops, there is an ${error}`)
+		}
+
 	}
 
-	post() {
+	async post() {
 		this.method = 'POST'
-		sendRequest(this.url, this.method, this.body)
+		try {
+			var resultData = await sendRequest(this.url, this.method, this.body)
+			return resultData
+
+		} catch (error) {
+			throw new Error(`Oops, there is an ${error}`)
+		}
+
 	}
 
-	patch() {
+	async patch() {
 		this.method = 'PATCH'
-		sendRequest(this.url, this.method, this.body)
+		try {
+			var resultData = await sendRequest(this.url, this.method, this.body)
+			return resultData
+
+		} catch (error) {
+			throw new Error(`Oops, there is an ${error}`)
+		}
+
 	}
 
-	put() {
+	async put() {
 		this.method = 'PUT'
-		sendRequest(this.url, this.method, this.body)
+		try {
+			var resultData = await sendRequest(this.url, this.method, this.body)
+			return resultData
+
+		} catch (error) {
+			throw new Error(`Oops, there is an ${error}`)
+		}
+
 	}
 
-	delete() {
+	async delete() {
 		this.method = 'DELETE'
-		sendRequest(this.url, this.method, this.body)
+		try {
+			var resultData = await sendRequest(this.url, this.method, this.body)
+			return resultData
+
+		} catch (error) {
+			throw new Error(`Oops, there is an ${error}`)
+		}
+
 	}
 
-	head() {
+	async head() {
 		this.method = 'HEAD'
-		sendRequest(this.url, this.method, this.body)
+		try {
+			var resultData = await sendRequest(this.url, this.method, this.body)
+			return resultData
+
+		} catch (error) {
+			throw new Error(`Oops, there is an ${error}`)
+		}
+
 	}
 }
 
-var newRequest = new Request(url);
-newRequest.get()
+// var newRequest = new Request(url);
+// newRequest.get()
+
+
+(async () => {
+	try {
+		var newRequest = new Request('https://jsonplaceholder.typicode.com/posts/1', 'GET', '');
+		var RESULT = await newRequest.get()
+		console.log('Hooray, it works: ', RESULT)
+	} catch (error) {
+		console.log('Just cry because of that: ', error)
+	}
+})()
+// function getData(url, method, body){
+//     return new Promise((resolve, reject) => {
+//         let xhr = new XMLHttpRequest();
+//         xhr.responseType = 'json';
+//         xhr.open(method, url);
+//         xhr.onload = () => {
+//             if (xhr.status === 200){
+//                 resolve(xhr.response)
+//             } else {
+//                 console.log('used method2 ', method)
+//                 reject(xhr.statusText);
+//             }
+//         };
+
+//         xhr.onerror = (error) => {
+//             console.log('used method ', method)
+//             reject(error)
+//         };
+
+//         xhr.send(body);
+//     })
+// }
+
+// async () => {
+//     try {
+//         const resp = await getData('/api/v1/test/')
+//         console.log(resp)
+//     } catch (err) {
+//        console.log(err)
+//     }
+// }()
