@@ -70,7 +70,7 @@ function sendRequest(url, method, body){
 							console.log('Данные получены: ', json)
 						},
 						(data) => {
-							console.log('Преобразование в Json невозможно. Данные ', data[0], 'error: ',data[1])
+							console.log('Преобразование в Json невозможно. Причина ', data[1], '\n\nДанные: ',data[0])
 						}
 					
 					)
@@ -94,38 +94,40 @@ function sendRequest(url, method, body){
 		// 	console.error('Во время выполнения возникла ошибка: ', error);
 		// })
 }
-function Request(url, body=''){
-	this.method = 'GET'
-	this.url = url
-	this.body = body
+class Request {
 
-	var self = this;
+	constructor(url, body='') {
+		
+		this.method = 'GET'
+		this.url = url
+		this.body = body
+	}
 
-	this.get = () => {
+	get() {
 		sendRequest(this.url, this.method, this.body)
 	}
 
-	this.post = () => {
+	post() {
 		this.method = 'POST'
 		sendRequest(this.url, this.method, this.body)
 	}
 
-	this.patch = () => {
+	patch() {
 		this.method = 'PATCH'
 		sendRequest(this.url, this.method, this.body)
 	}
 
-	this.put = () => {
+	put() {
 		this.method = 'PUT'
 		sendRequest(this.url, this.method, this.body)
 	}
 
-	this.delete = () => {
+	delete() {
 		this.method = 'DELETE'
 		sendRequest(this.url, this.method, this.body)
 	}
 
-	this.head = () => {
+	head() {
 		this.method = 'HEAD'
 		sendRequest(this.url, this.method, this.body)
 	}
