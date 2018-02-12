@@ -11,9 +11,9 @@ async function getJson(data){
 	}
 }
 
-async function getData(url, method, body){
+async function getData(url, method, options){
 	try {
-		let data = await fetch(url, method, body);
+		let data = await fetch(url, method, options);
 		return data
 
 	} catch (error) {
@@ -21,9 +21,9 @@ async function getData(url, method, body){
 	}
 }
 
-async function sendRequest(url, method, body){
+async function sendRequest(url, method, options){
 	try {
-		let data = await getData(url, method, body);
+		let data = await getData(url, method, options);
 		let json = await getJson(data);
 		return json
 
@@ -32,56 +32,57 @@ async function sendRequest(url, method, body){
 	}
 
 }
-class MakeRequest {
-	async send() {
+// class MakeRequest {
+// 	async send() {
+// 		try {
+// 			var resultData = await sendRequest(this.url, this.method, this.body)
+// 			return resultData
+
+// 		} catch (error) {
+// 			throw new Error(`Oops, there is an ${error}`)
+// 		}
+// 	}
+// }
+
+
+class Request {
+
+	constructor(baseUrl) {
+		this.baseUrl = baseUrl
+	}
+
+	async send(uri, method, options) {
 		try {
-			var resultData = await sendRequest(this.url, this.method, this.body)
+			var resultData = await sendRequest(this.baseUrl + uri, this.method, this.options)
 			return resultData
 
 		} catch (error) {
 			throw new Error(`Oops, there is an ${error}`)
 		}
 	}
-}
 
-
-class Request extends MakeRequest {
-
-	constructor(url, body='') {
-		super()
-
-		this.url = url
-		this.body = body
+	async get(uri, options) {
+		return this.send(uri, 'GET', options)
 	}
 
-	async get() {
-		this.method = 'GET'
-		return this.send()
+	async post(uri, options) {
+		return this.send(uri, 'POST', options)
 	}
 
-	async post() {
-		this.method = 'POST'
-		return this.send()
+	async patch(uri, options) {
+		return this.send(uri, 'PATCH', options)
 	}
 
-	async patch() {
-		this.method = 'PATCH'
-		return this.send()
+	async put(uri, options) {
+		return this.send(uri, 'PUT', options)
 	}
 
-	async put() {
-		this.method = 'PUT'
-		return this.send()
+	async delete(uri, options) {
+		return this.send(uri, 'DELETE', options)
 	}
 
-	async delete() {
-		this.method = 'DELETE'
-		return this.send()
-	}
-
-	async head() {
-		this.method = 'HEAD'
-		return this.send()
+	async head(uri, options) {
+		return this.send(uri, 'HEAD', options)
 	}
 }
 
@@ -89,8 +90,8 @@ class Request extends MakeRequest {
 
 (async () => {
 	try {
-		var newRequest = new Request('https://jsonplaceholder.typicode.com/posts/1', 'GET', '');
-		var RESULT = await newRequest.get()
+		var newRequest = new Request('https://jsonplaceholder.typicode.com/');
+		var RESULT = await newRequest.get('posts/1', {})
 		console.log('Hooray, it works: \n\n', RESULT)
 	} catch (error) {
 		console.log('Just cry because of that: ', error)
