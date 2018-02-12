@@ -53,7 +53,8 @@ class Request {
 
 	async send(uri, method, options) {
 		try {
-			var resultData = await sendRequest(this.baseUrl + uri, this.method, this.options)
+			options['method'] = method
+			var resultData = await sendRequest(this.baseUrl + uri, options)
 			return resultData
 
 		} catch (error) {
